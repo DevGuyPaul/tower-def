@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#253c22">
+  <title>Kingdom Under Siege</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="game-shell" aria-label="Kingdom Under Siege tower defence game">
+    <div id="game-stage">
+    <canvas id="game" width="1280" height="720" aria-label="Tower defence battlefield"></canvas>
+
+    <section class="hud top-hud" aria-label="Game statistics">
+      <div class="crest"><span class="crest-icon">🐱</span><span><small>KINGDOM</small><strong>UNDER SIEGE</strong></span></div>
+      <div class="stats">
+        <div><small>WAVE</small><strong id="wave">0 / 8</strong></div>
+        <div><small>GOLD</small><strong id="money">240</strong></div>
+        <div class="health-stat"><small>CASTLE</small><strong id="lives">20 / 20</strong><span><i id="health-fill"></i></span></div>
+        <div class="enemy-stat"><small>ENEMIES</small><strong id="enemy-count">0</strong><span><i id="enemy-fill"></i></span></div>
+        <div><small>SCORE</small><strong id="score">0</strong></div>
+      </div>
+      <div class="hud-actions">
+        <button id="ai-btn" class="icon-btn ai-btn" aria-label="Toggle AI takeover" aria-pressed="false" title="Let AI take over">AI OFF</button>
+        <button id="sound-btn" class="icon-btn" aria-label="Toggle sound" title="Sound">🔊</button>
+        <button id="fullscreen-btn" class="icon-btn" aria-label="Enter fullscreen" title="Fullscreen">⛶</button>
+        <button id="menu-btn" class="icon-btn menu-sign" aria-label="Open menu" title="Menu">☰</button>
+      </div>
+    </section>
+
+    <div id="message" class="message">PROTECT THE ROYAL RAMEN</div>
+    <div id="placement-hint" class="placement-hint" hidden></div>
+    <button id="mop-btn" class="mop-btn" aria-label="Remove clouds" title="Remove the clouds" hidden><span>☁</span>REMOVE CLOUDS</button>
+    <div id="event-status" class="event-status" hidden></div>
+    <aside id="dialogue-box" class="dialogue-box" aria-live="polite" hidden>
+      <div id="dialogue-portrait" class="dialogue-portrait cat"></div>
+      <div><small id="dialogue-speaker">CAT KING</small><p id="dialogue-text"></p></div>
+    </aside>
+    <div id="speed-control" class="speed-control" hidden>
+      <label for="speed-slider">BATTLE SPEED <output id="speed-value">1×</output></label>
+      <input id="speed-slider" type="range" min="1" max="10" step="1" value="1" aria-label="Battle speed from one to ten times">
+      <span><i>1×</i><i>5×</i><i>10×</i></span>
+    </div>
+    <button id="repair-btn" class="repair-btn" title="Restore 25% castle health for 1000 gold" hidden>
+      <span>🔨</span><strong>REPAIR CASTLE</strong><small id="repair-label">1000G · +25% HEALTH</small>
+    </button>
+
+    <section id="build-dock" class="hud build-dock" aria-label="Tower construction menu" hidden>
+      <div id="tower-buttons" class="tower-buttons"></div>
+      <div id="tower-inspector" class="tower-inspector" hidden>
+        <span><small>SELECTED</small><strong id="inspector-name">Tower</strong></span>
+        <button id="upgrade-btn">UPGRADE</button><button id="sell-btn" class="muted">SELL</button>
+      </div>
+      <button id="cancel-selection-btn" class="cancel-selection" title="Cancel selection (right-click)">✕<small>CANCEL</small></button>
+      <button id="wave-btn" class="wave-btn">START WAVE 1</button>
+    </section>
+
+    <section id="start-screen" class="screen-overlay">
+      <div class="start-card">
+        <p class="kicker">A FANTASY RAMEN DEFENCE</p>
+        <h1>KINGDOM<br><span>UNDER SIEGE</span></h1>
+
+        <h2>CHOOSE A LEVEL</h2>
+        <div id="level-options" class="level-options">
+          <button class="level-card selected" data-level="greenvale"><i>🌳</i><strong>GREENVALE</strong><small>Woodland Crossing</small></button>
+          <button class="level-card" data-level="sunreach"><i>🏜️</i><strong>SUNREACH</strong><small>Desert Ruins</small></button>
+          <button class="level-card" data-level="frostholm"><i>🏔️</i><strong>FROSTHOLM</strong><small>Frozen Pass</small></button>
+        </div>
+
+        <h2>DIFFICULTY</h2>
+        <div id="difficulty-options" class="difficulty-options">
+          <button data-difficulty="easy">EASY<small>8 waves</small></button>
+          <button class="selected" data-difficulty="normal">NORMAL<small>10 waves · random events</small></button>
+          <button data-difficulty="hard">HARD<small>unknown waves · chaos</small></button>
+        </div>
+        <button id="start-btn" class="large-btn">DEFEND THE RAMEN</button>
+        <div class="main-secondary-actions">
+          <button id="story-btn" class="main-fullscreen-btn">▶ WATCH STORY</button>
+          <button id="main-fullscreen-btn" class="main-fullscreen-btn">⛶ FULLSCREEN</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="story-screen" class="story-screen" aria-label="The story of the royal ramen" hidden>
+      <div class="story-card">
+        <div class="story-visual"><div id="story-art" class="story-art panel-1"></div></div>
+        <div id="story-copy" class="story-copy">
+          <p class="kicker">THE LEGEND OF THE ROYAL RAMEN</p>
+          <span id="story-count" class="story-count">1 / 4</span>
+          <h2 id="story-title">THE LAST PERFECT BOWL</h2>
+          <p id="story-text">High in the castle tower, the Cat King guards the most delicious ramen in the kingdom.</p>
+          <div id="story-dots" class="story-dots" aria-hidden="true"><i class="active"></i><i></i><i></i><i></i></div>
+          <div class="story-actions"><button id="story-skip-btn">SKIP</button><button id="story-next-btn">NEXT</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pause-screen" class="screen-overlay dim" hidden>
+      <div class="modal-card">
+        <span class="shield">☰</span><h2>GAME MENU</h2>
+        <button id="resume-btn" class="large-btn">RETURN TO BATTLE</button>
+        <button id="restart-btn">RESTART LEVEL</button>
+        <button id="level-select-btn">LEVEL SELECT</button>
+        <button id="difficulty-menu-btn">CHANGE DIFFICULTY · NORMAL</button>
+        <div id="menu-difficulty-panel" class="menu-difficulty-panel" hidden>
+          <small>CHANGING DIFFICULTY RESTARTS THIS LEVEL</small>
+          <div>
+            <button data-menu-difficulty="easy">EASY</button>
+            <button data-menu-difficulty="normal" class="selected">NORMAL</button>
+            <button data-menu-difficulty="hard">HARD</button>
+          </div>
+        </div>
+        <button id="menu-sound-btn">SOUND: ON</button>
+      </div>
+    </section>
+
+    <section id="result-screen" class="screen-overlay dim" hidden>
+      <div class="modal-card result-card">
+        <span id="result-icon" class="shield">♛</span>
+        <p id="result-kicker" class="kicker">VICTORY</p><h2 id="result-title">THE RAMEN IS SAFE</h2>
+        <div id="result-art" class="result-art victory" role="img" aria-label="The Cat King celebrates with the saved ramen"></div>
+        <div class="result-stats"><span>SCORE <b id="result-score">0</b></span><span>WAVES <b id="result-waves">0</b></span><span>BEST <b id="result-best">0</b></span></div>
+        <button id="play-again-btn" class="large-btn">PLAY AGAIN</button>
+        <button id="results-level-select-btn">CHOOSE ANOTHER LEVEL</button>
+      </div>
+    </section>
+    </div>
+  </main>
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
