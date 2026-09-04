@@ -49,6 +49,7 @@ const storySlides = [
 let storyIndex = 0;
 let storyIdleTimer = 0;
 let storyAdvanceTimer = 0;
+let storyExitTimer = 0;
 let storyAutoPlayed = false;
 
 class SoundEngine {
@@ -280,6 +281,7 @@ function scheduleStoryCutscene() {
 function showStorySlide(index) {
   storyIndex = Math.max(0, Math.min(storySlides.length - 1, index));
   const slide = storySlides[storyIndex];
+  const slideDuration = storyIndex === storySlides.length - 1 ? 9200 : 7800;
   ui.storyArt.className = `story-art panel-${storyIndex + 1}`;
   ui.storyArt.style.animation = 'none';
   void ui.storyArt.offsetWidth;
@@ -290,33 +292,56 @@ function showStorySlide(index) {
   ui.storyCount.textContent = `${storyIndex + 1} / ${storySlides.length}`;
   ui.storyTitle.textContent = slide.title;
   ui.storyText.textContent = slide.text;
-  [...ui.storyDots.children].forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === storyIndex));
+  const progressBars = [...ui.storyDots.children];
+  progressBars.forEach((bar) => bar.classList.remove('active', 'complete'));
+  ui.storyDots.style.setProperty('--story-duration', `${slideDuration}ms`);
+  void ui.storyDots.offsetWidth;
+  progressBars.forEach((bar, barIndex) => {
+    bar.classList.toggle('complete', barIndex < storyIndex);
+    bar.classList.toggle('active', barIndex === storyIndex);
+  });
   ui.storyNextButton.textContent = storyIndex === storySlides.length - 1 ? 'DEFEND THE RAMEN' : 'NEXT';
   clearTimeout(storyAdvanceTimer);
   storyAdvanceTimer = setTimeout(() => {
     if (storyIndex < storySlides.length - 1) showStorySlide(storyIndex + 1);
     else closeStoryCutscene();
-  }, storyIndex === storySlides.length - 1 ? 9200 : 7800);
+  }, slideDuration);
 }
 
 function showStoryCutscene(index = 0) {
   if (state.mode !== 'menu') return;
   clearStoryTimers();
+  clearTimeout(storyExitTimer);
+  storyExitTimer = 0;
+  ui.storyScreen.classList.remove('story-exit');
   storyAutoPlayed = true;
   ui.storyScreen.hidden = false;
   showStorySlide(index);
   sounds.select();
 }
 
-function closeStoryCutscene() {
+function resetStoryExit() {
+  clearTimeout(storyExitTimer);
+  storyExitTimer = 0;
+  ui.storyScreen.classList.remove('story-exit');
+}
+
+function closeStoryCutscene(startBattle = false) {
   clearTimeout(storyAdvanceTimer);
   storyAdvanceTimer = 0;
-  ui.storyScreen.hidden = true;
-  sounds.click();
+  if (ui.storyScreen.hidden || ui.storyScreen.classList.contains('story-exit')) return;
+  const enterBattle = startBattle === true;
+  ui.storyScreen.classList.add('story-exit');
+  if (enterBattle) startGame(true);
+  else sounds.click();
+  storyExitTimer = setTimeout(() => {
+    ui.storyScreen.hidden = true;
+    resetStoryExit();
+  }, 900);
 }
 
 function nextStorySlide() {
-  if (storyIndex >= storySlides.length - 1) closeStoryCutscene();
+  if (storyIndex >= storySlides.length - 1) closeStoryCutscene(true);
   else { sounds.click(); showStorySlide(storyIndex + 1); }
 }
 
@@ -434,10 +459,14 @@ function updateUI() {
   updateInspector();
 }
 
-function startGame() {
+function startGame(keepStoryOverlay = false) {
+  const transitioningFromStory = keepStoryOverlay === true;
   clearStoryTimers();
   stopResultArtScroll();
-  ui.storyScreen.hidden = true;
+  if (!transitioningFromStory) {
+    resetStoryExit();
+    ui.storyScreen.hidden = true;
+  }
   sounds.unlock();
   sounds.click();
   sounds.fadeMenuMusic(1.8);
@@ -496,6 +525,7 @@ function startGame() {
 
 function returnToLevelSelect() {
   clearStoryTimers();
+  resetStoryExit();
   stopResultArtScroll();
   state.mode = 'menu';
   state.runningWave = false;

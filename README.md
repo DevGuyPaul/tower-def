@@ -53,7 +53,7 @@ Click **AI OFF** in the top-right HUD at any time during play to enable an auton
 
 ### Additional implemented features
 
-- Animated four-panel anime-comic story after 15 seconds of menu inactivity, with slow blur-to-focus transitions and a **Watch Story** replay control
+- Animated four-panel anime-comic story after 15 seconds of menu inactivity, with slide-duration progress bars, slow blur-to-focus transitions, a **Watch Story** replay control, and a final cinematic fade directly into the selected battle
 - Cat King and Orc King portraits for warnings, taunts, anti-spell updates, and dangerous castle-health thresholds
 - Result artwork automatically pans from top to bottom and back while selecting only the appropriate victory or defeat illustration
 - Easy mode with eight waves and no random events; Normal with ten waves and moderate events; Hard with a hidden 12–20 waves and roughly twice the event frequency
