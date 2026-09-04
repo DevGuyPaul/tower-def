@@ -4,7 +4,7 @@ A full-screen fantasy ramen-defence game built with plain HTML, CSS, Canvas, and
 
 ## Run the game
 
-Open `index.html` in a modern desktop or mobile browser. The complete game stage scales uniformly and always fills the browser width, including its canvas, HUD, menus, controls, text, and hit targets. Ultrawide displays receive additional playable landscape instead of side bars, stretching, or cropped controls. The fullscreen button provides an immersive view.
+Open `index.html` in a modern desktop or mobile browser, then press **Start Game** to enter the menu and enable its ambient audio. The complete game stage scales uniformly and always fills the browser width, including its canvas, HUD, menus, controls, text, and hit targets. Ultrawide displays receive additional playable landscape instead of side bars, stretching, or cropped controls. The fullscreen button provides an immersive view.
 
 ## How to play
 
@@ -66,6 +66,7 @@ Click **AI OFF** in the top-right HUD at any time during play to enable an auton
 - Four animated castle-damage states and a 1000-gold repair that restores 25% maximum health without exceeding 100%
 - Optional AI takeover that analyzes coverage, builds, upgrades, repairs, launches waves, fires manually, clears clouds, and can be disabled instantly
 - Draggable 1×–10× battle-speed controller, fullscreen controls, free-form tower placement, keyboard shortcuts, and touchpad-compatible selection cancellation
+- Browser-compliant **Start Game** entrance that unlocks sound and fades into the level-selection menu
 
 ## Architecture
 

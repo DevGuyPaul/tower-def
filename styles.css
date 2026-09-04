@@ -245,6 +245,27 @@ button:focus-visible { outline: 3px solid #fff3a2; outline-offset: 2px; }
 }
 .screen-overlay.dim { background: #100d09b8; backdrop-filter: blur(7px); }
 
+.entry-screen {
+  position:absolute;
+  z-index:70;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at 50% 36%,#7d925c99,transparent 34%),linear-gradient(145deg,#213526f7,#0e130ffb);
+  backdrop-filter:blur(12px);
+}
+.entry-screen.leaving { pointer-events:none; animation:entry-screen-exit 1.05s cubic-bezier(.55,0,.75,.35) forwards; }
+.entry-screen.leaving .entry-card { animation:entry-card-exit 1.05s cubic-bezier(.55,0,.75,.35) forwards; }
+.entry-card { width:560px; padding:46px 54px 48px; border:2px solid #bc914b; border-radius:20px; background:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px),linear-gradient(145deg,#493625,#201813); background-size:18px 18px,18px 18px,auto; box-shadow:0 26px 90px #000d,inset 0 0 52px #150c06; text-align:center; }
+.entry-emblem { display:grid; place-items:center; width:92px; height:92px; margin:0 auto 22px; border:3px solid #e5b94d; border-radius:50%; background:#5b3c23; font-size:47px; box-shadow:0 0 30px #e5b94d33,inset 0 0 20px #0006; }
+.entry-card h1 { margin:0; color:#fff2c3; font-size:54px; line-height:.9; letter-spacing:3px; text-shadow:0 4px #4d291e,0 7px 14px #000; }
+.entry-card h1 span { color:var(--gold); font-size:.68em; }
+.entry-invitation { margin:22px auto 25px; color:#d9c8a6; font:16px/1.55 Georgia,serif; }
+.entry-btn { min-width:280px; padding:15px 28px; border:2px solid #f0cc72; border-radius:9px; background:linear-gradient(#bc6242,#8d3d2e); color:#fff8df; cursor:pointer; font:700 16px Georgia,serif; letter-spacing:1.5px; box-shadow:inset 0 1px #ffffff4d,0 6px 16px #160b08; }
+.entry-btn:hover { filter:brightness(1.14); transform:translateY(-1px); }
+@keyframes entry-screen-exit { from { opacity:1; backdrop-filter:blur(12px); } to { opacity:0; backdrop-filter:blur(24px); } }
+@keyframes entry-card-exit { from { opacity:1; transform:scale(1); filter:blur(0); } to { opacity:0; transform:scale(1.055); filter:blur(12px); } }
+
 .start-card, .modal-card {
   width: min(760px, 96vw);
   padding: 24px 30px 22px;

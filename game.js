@@ -19,6 +19,7 @@ const ui = {
   dialogueSpeaker: byId('dialogue-speaker'), dialogueText: byId('dialogue-text'),
   speedControl: byId('speed-control'), speedSlider: byId('speed-slider'), speedValue: byId('speed-value'),
   repairButton: byId('repair-btn'), repairLabel: byId('repair-label'),
+  entryScreen: byId('entry-screen'), entryButton: byId('entry-btn'),
   storyScreen: byId('story-screen'), storyArt: byId('story-art'), storyCount: byId('story-count'),
   storyTitle: byId('story-title'), storyText: byId('story-text'), storyNextButton: byId('story-next-btn'),
   storyDots: byId('story-dots'), storyCopy: byId('story-copy'), resultArt: byId('result-art')
@@ -50,6 +51,7 @@ let storyIndex = 0;
 let storyIdleTimer = 0;
 let storyAdvanceTimer = 0;
 let storyExitTimer = 0;
+let entryExitTimer = 0;
 let storyAutoPlayed = false;
 
 class SoundEngine {
@@ -274,8 +276,23 @@ function clearStoryTimers() {
 
 function scheduleStoryCutscene() {
   clearTimeout(storyIdleTimer);
-  if (state.mode !== 'menu' || storyAutoPlayed || !ui.storyScreen.hidden) return;
+  if (state.mode !== 'menu' || storyAutoPlayed || !ui.storyScreen.hidden || !ui.entryScreen.hidden) return;
   storyIdleTimer = setTimeout(() => showStoryCutscene(0), 15000);
+}
+
+function enterMainMenu() {
+  if (ui.entryScreen.hidden || ui.entryScreen.classList.contains('leaving')) return;
+  sounds.unlock();
+  sounds.startMenuMusic();
+  sounds.select();
+  ui.entryScreen.classList.add('leaving');
+  clearTimeout(entryExitTimer);
+  entryExitTimer = setTimeout(() => {
+    ui.entryScreen.hidden = true;
+    ui.entryScreen.classList.remove('leaving');
+    entryExitTimer = 0;
+    scheduleStoryCutscene();
+  }, 1050);
 }
 
 function showStorySlide(index) {
@@ -1836,6 +1853,7 @@ function setupEvents() {
   canvas.addEventListener('pointermove', onPointerMove);
   canvas.addEventListener('pointerleave', () => { state.mouse = null; ui.placementHint.hidden = true; });
   canvas.addEventListener('pointerdown', onCanvasClick);
+  ui.entryButton.addEventListener('click', enterMainMenu);
   byId('start-btn').addEventListener('click', startGame);
   byId('story-btn').addEventListener('click', () => showStoryCutscene(0));
   ui.storyNextButton.addEventListener('click', nextStorySlide);
@@ -1887,7 +1905,7 @@ function setupEvents() {
     document.querySelectorAll('[data-difficulty]').forEach((item) => item.classList.toggle('selected', item === button));
     updateUI();
   }));
-  document.querySelectorAll('#start-screen button, #story-screen button, #pause-screen button, #result-screen button').forEach((button) => {
+  document.querySelectorAll('#entry-screen button, #start-screen button, #story-screen button, #pause-screen button, #result-screen button').forEach((button) => {
     button.addEventListener('pointerenter', () => sounds.hover());
     button.addEventListener('pointerdown', () => {
       if (!button.matches('[data-difficulty], [data-menu-difficulty]')) sounds.menuPress();
@@ -1920,10 +1938,6 @@ function initialize() {
   setupEvents();
   setGameSpeed(1);
   updateUI();
-  // Start immediately where autoplay permission exists; otherwise remain queued until any interaction.
-  sounds.unlock();
-  sounds.startMenuMusic();
-  scheduleStoryCutscene();
   document.body.dataset.gameReady = 'true';
   requestAnimationFrame(frame);
 }
