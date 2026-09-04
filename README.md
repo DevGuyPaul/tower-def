@@ -22,43 +22,49 @@ Fullscreen can be entered from either the main menu or the in-game HUD.
 
 Click **AI OFF** in the top-right HUD at any time during play to enable an autonomous takeover. Click the resulting **AI ON** button to immediately return control to the player. The AI leaves the player's current tower selection intact.
 
-## Implemented features
+## Hackathon feature checklist
 
-- Three levels with unique tracks and forest, desert, and frozen settings
-- An animated four-panel anime-comic origin story that begins after 15 seconds of menu inactivity, uses slow blur-to-focus transitions, and can be replayed with **Watch Story**
-- Cat King and Orc King portrait messages for event warnings, taunts, anti-spell updates, and dangerous castle-health thresholds
-- Illustrated victory and defeat scenes showing either the saved ramen or the Orc King escaping with it
-- Nine map-exclusive towers: three different defences in every realm
-- Nine map-exclusive enemies: three different attackers in every realm
-- Easy uses the previous Normal balance (8 waves, 20 health) and has no random events
-- Normal uses the previous Hard balance (10 waves, 15 health) and introduces the complete random-event system at a moderate cadence
-- Hard secretly chooses 12-20 waves for each new game, keeps the total hidden until the result, strengthens enemies, and triggers events roughly twice as often
-- Free-form tower placement with path, boundary, castle, and tower collision rules
-- Single-target, splash, and slowing options tailored to each map
-- Tower upgrades and selling
-- A unique final boss for each map and phasing Ice Wraiths in Frostholm
-- Giant birds that carry enemies much closer to the castle; towers can shoot the bird to drop and resume attacking its passenger
-- Thief birds that steal a purchased tower and carry it off-screen
-- Dense interactive steam covering most of the map until the player selects the centered **Remove Clouds** control and clears the view
-- Temporary invisible enemies that continue progressing while towers cannot target them
-- Timed battlefield inversion with matching pointer controls during event-enabled difficulties
-- A separate slow 360-degree battlefield spin whose pointer controls follow the current rotation
-- A possessed-castle event: the castle follows the road toward the wave, enemies stop to attack it, and it visibly retraces its route when the spell ends
-- Manual-fire events that disable automatic targeting; each Spacebar press makes every tower fire one normal shot at its usual priority target
-- Enemy speed-surge events and bounce-forward attacks that advance surviving targets along the path
-- Wave progress HUD with exact enemies remaining
-- Four animated castle-damage states: cracks at 75% health, one tower lost at 50%, both towers lost at 25%, and rubble at zero
-- Castle repairs: spend 1000 gold to restore exactly 25% maximum health, capped at 100%; AI takeover can also make emergency repairs
-- Gold, castle health, score, wave bonuses, and persistent high score
-- Visible castle damage, cracks, impact shake, and defeat when health reaches zero
-- In-game HUD, construction dock, pause menu, level select, restart-on-change difficulty selector, and results screen
-- Optional in-game AI takeover that analyzes placement coverage, constructs, upgrades, launches waves, fires manual volleys, clears clouds, and can be disabled instantly
-- Uniform full-screen scaling for the whole game stage
-- Synthesized effects and adaptive music using the Web Audio API: the realm-sensitive main-menu ambience fades gradually when play begins; woodland, desert, and winter maps have different scales and instruments; and each difficulty has its own cue, pitch, layering, and tempo
-- Fullscreen and sound controls
-- A draggable battle-speed controller from 1× through 10×
-- Unit tests for configuration, difficulty progression, map uniqueness, and placement geometry
-- Automated headless-browser smoke tests for scaling, menus, difficulty, placement, and wave launch
+### Required features — 8/8 complete
+
+- [x] **Playable map with a defined enemy path:** three maps, each with a unique visible route.
+- [x] **Enemy spawning and wave progression:** escalating waves, mixed enemy compositions, final bosses, and an enemies-remaining progress bar.
+- [x] **At least three tower types with different behaviours:** every map has three exclusive towers using single-target, splash, slowing, or support behaviour.
+- [x] **Tower placement and purchase mechanics:** towers can be purchased and freely placed on legal open ground, but not on the track, castle, boundary, or another tower.
+- [x] **Currency or resource system:** enemies and wave completion award gold; construction, upgrades, and castle repairs spend it.
+- [x] **Player health, base damage, or lives system:** enemies reaching the ramen castle cause damage and progressively crack or destroy it.
+- [x] **Win and lose conditions:** completing the final wave wins; losing all castle health ends in defeat.
+- [x] **Basic UI showing wave, currency, score, and health:** all four values remain visible in the gameplay HUD.
+
+### Optional and bonus features — all categories complete
+
+- [x] **Multiple enemy types:** nine map-exclusive enemies with different health, speed, size, abilities, and three unique final bosses.
+- [x] **Tower upgrades:** every purchased tower can reach level three or be sold.
+- [x] **Pause, restart, and level selection:** available from the in-game menu, with selection clearing and difficulty changes.
+- [x] **Multiple maps and difficulty levels:** Greenvale, Sunreach, and Frostholm each have their own route, roster, theme, and music; Easy, Normal, and Hard alter waves, health, economy, enemy strength, and event frequency.
+- [x] **Sound, music, animation, and visual polish:** synthesized sound effects, adaptive map/difficulty music, animated projectiles and particles, character dialogue, cutscenes, castle damage, and event animations.
+- [x] **Score, high score, and post-game results:** score is tracked during play, the best result persists locally, and victory/defeat screens show score and completed waves.
+- [x] **Creative theme, story, and art direction:** the Cat King defends the last perfect bowl of ramen from the Orc King, supported by an illustrated origin story and separate victory and defeat scenes.
+
+### Technical requirements — 3/3 complete
+
+- [x] **Architecture description:** documented in the Architecture section below.
+- [x] **Unit tests:** `tests.js` covers configuration, difficulty progression, map uniqueness, tower/enemy rosters, and placement geometry.
+- [x] **Automated UI tests:** `ui-tests.mjs` runs the real game in headless Chrome or Edge and verifies initialization, responsive scaling, menus, story, difficulty, placement, waves, random events, AI takeover, repair, and both endings.
+
+### Additional implemented features
+
+- Animated four-panel anime-comic story after 15 seconds of menu inactivity, with slow blur-to-focus transitions and a **Watch Story** replay control
+- Cat King and Orc King portraits for warnings, taunts, anti-spell updates, and dangerous castle-health thresholds
+- Easy mode with eight waves and no random events; Normal with ten waves and moderate events; Hard with a hidden 12–20 waves and roughly twice the event frequency
+- Giant birds that carry enemies toward the castle and can be attacked to drop their passengers
+- Thief birds that steal purchased towers and carry them off-screen
+- Dense interactive steam that covers the battlefield until the player uses **Remove Clouds**
+- Temporary invisible enemies, battlefield inversion, a slow 360-degree spin, enemy speed surges, and bounce-forward attacks
+- A possessed-castle event that moves the castle toward enemies before visibly returning it home
+- Manual-fire events where each Spacebar press makes every tower fire one normal priority shot
+- Four animated castle-damage states and a 1000-gold repair that restores 25% maximum health without exceeding 100%
+- Optional AI takeover that analyzes coverage, builds, upgrades, repairs, launches waves, fires manually, clears clouds, and can be disabled instantly
+- Draggable 1×–10× battle-speed controller, fullscreen controls, free-form tower placement, keyboard shortcuts, and touchpad-compatible selection cancellation
 
 ## Architecture
 

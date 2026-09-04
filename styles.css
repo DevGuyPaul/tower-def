@@ -345,7 +345,9 @@ button:focus-visible { outline: 3px solid #fff3a2; outline-offset: 2px; }
 .result-art {
   grid-area:art;
   width:100%;
+  height:auto;
   aspect-ratio:1;
+  align-self:center;
   margin:0;
   border:2px solid #8e6a37;
   border-radius:12px;
