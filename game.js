@@ -436,6 +436,7 @@ function updateUI() {
 
 function startGame() {
   clearStoryTimers();
+  stopResultArtScroll();
   ui.storyScreen.hidden = true;
   sounds.unlock();
   sounds.click();
@@ -495,6 +496,7 @@ function startGame() {
 
 function returnToLevelSelect() {
   clearStoryTimers();
+  stopResultArtScroll();
   state.mode = 'menu';
   state.runningWave = false;
   state.enemies = [];
@@ -1396,6 +1398,17 @@ function completeWave() {
   setMessage(`WAVE CLEARED · ${bonus} BONUS GOLD`, 2800);
 }
 
+function stopResultArtScroll() {
+  ui.resultArt.style.animation = 'none';
+}
+
+function startResultArtScroll(victory) {
+  ui.resultArt.className = `result-art ${victory ? 'victory' : 'defeat'}`;
+  ui.resultArt.style.animation = 'none';
+  void ui.resultArt.offsetWidth;
+  ui.resultArt.style.removeProperty('animation');
+}
+
 function finishGame(victory) {
   if (state.mode === 'won' || state.mode === 'lost') return;
   state.mode = victory ? 'won' : 'lost';
@@ -1412,7 +1425,7 @@ function finishGame(victory) {
   byId('result-icon').textContent = victory ? '🐱' : '👑';
   byId('result-kicker').textContent = victory ? 'VICTORY' : 'DEFEAT';
   byId('result-title').textContent = victory ? 'THE RAMEN IS SAFE' : 'THE RAMEN WAS STOLEN';
-  ui.resultArt.className = `result-art ${victory ? 'victory' : 'defeat'}`;
+  startResultArtScroll(victory);
   ui.resultArt.setAttribute('aria-label', victory ? 'The Cat King celebrates with the saved ramen' : 'The Orc King escapes with the stolen ramen');
   byId('result-score').textContent = state.score;
   byId('result-waves').textContent = `${state.wave}/${state.totalWaves}`;

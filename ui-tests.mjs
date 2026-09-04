@@ -146,10 +146,12 @@ try {
   assert.equal(await evaluate("!state.aiEnabled && document.getElementById('ai-btn').textContent==='AI OFF'"), true, 'the player can turn AI takeover off during the game');
   await evaluate("finishGame(true); true");
   assert.equal(await evaluate("document.getElementById('result-title').textContent==='THE RAMEN IS SAFE' && document.getElementById('result-art').classList.contains('victory')"), true, 'victory displays the saved-ramen ending');
-  assert.equal(await evaluate("(() => { const art=document.getElementById('result-art'); const box=art.getBoundingClientRect(); const style=getComputedStyle(art); return Math.abs(box.width-box.height)<1 && style.backgroundSize==='100% 200%' && style.backgroundPositionY==='0px'; })()"), true, 'the full square victory panel is shown without a wide crop');
-  await evaluate("startGame(); finishGame(false); true");
+  assert.equal(await evaluate("(() => { const art=document.getElementById('result-art'); const box=art.getBoundingClientRect(); const style=getComputedStyle(art); const animation=art.getAnimations()[0]; return Math.abs(box.width-box.height)<1 && style.backgroundSize==='200% auto' && Number.parseFloat(style.backgroundPositionX)===0 && style.animationName==='result-art-scroll' && style.animationIterationCount==='infinite' && animation.currentTime<500; })()"), true, 'victory selects only its tall illustration and begins an infinite top-to-bottom pan');
+  await evaluate("startGame(); true");
+  assert.equal(await evaluate("getComputedStyle(document.getElementById('result-art')).animationName==='none'"), true, 'leaving results stops the artwork loop');
+  await evaluate("finishGame(false); true");
   assert.equal(await evaluate("document.getElementById('result-title').textContent==='THE RAMEN WAS STOLEN' && document.getElementById('result-art').classList.contains('defeat')"), true, 'defeat displays the stolen-ramen ending');
-  assert.equal(await evaluate("getComputedStyle(document.getElementById('result-art')).backgroundPositionY==='100%'"), true, 'the full square defeat panel is selected from the vertical artwork sheet');
+  assert.equal(await evaluate("(() => { const art=document.getElementById('result-art'); const style=getComputedStyle(art); const animation=art.getAnimations()[0]; return Number.parseFloat(style.backgroundPositionX)>99 && style.animationName==='result-art-scroll' && animation.currentTime<500; })()"), true, 'defeat selects only its tall illustration and restarts the pan from the top');
   assert.deepEqual(runtimeExceptions, [], 'gameplay and Canvas rendering produce no browser exceptions');
   socket.close();
   console.log('Kingdom Under Siege browser UI tests passed');

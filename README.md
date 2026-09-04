@@ -43,7 +43,7 @@ Click **AI OFF** in the top-right HUD at any time during play to enable an auton
 - [x] **Multiple maps and difficulty levels:** Greenvale, Sunreach, and Frostholm each have their own route, roster, theme, and music; Easy, Normal, and Hard alter waves, health, economy, enemy strength, and event frequency.
 - [x] **Sound, music, animation, and visual polish:** synthesized sound effects, adaptive map/difficulty music, animated projectiles and particles, character dialogue, cutscenes, castle damage, and event animations.
 - [x] **Score, high score, and post-game results:** score is tracked during play, the best result persists locally, and victory/defeat screens show score and completed waves.
-- [x] **Creative theme, story, and art direction:** the Cat King defends the last perfect bowl of ramen from the Orc King, supported by an illustrated origin story and separate victory and defeat scenes.
+- [x] **Creative theme, story, and art direction:** the Cat King defends the last perfect bowl of ramen from the Orc King, supported by an illustrated origin story and separate vertically panning victory and defeat scenes.
 
 ### Technical requirements — 3/3 complete
 
@@ -55,6 +55,7 @@ Click **AI OFF** in the top-right HUD at any time during play to enable an auton
 
 - Animated four-panel anime-comic story after 15 seconds of menu inactivity, with slow blur-to-focus transitions and a **Watch Story** replay control
 - Cat King and Orc King portraits for warnings, taunts, anti-spell updates, and dangerous castle-health thresholds
+- Result artwork automatically pans from top to bottom and back while selecting only the appropriate victory or defeat illustration
 - Easy mode with eight waves and no random events; Normal with ten waves and moderate events; Hard with a hidden 12–20 waves and roughly twice the event frequency
 - Giant birds that carry enemies toward the castle and can be attacked to drop their passengers
 - Thief birds that steal purchased towers and carry them off-screen

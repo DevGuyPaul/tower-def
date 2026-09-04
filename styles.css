@@ -354,11 +354,19 @@ button:focus-visible { outline: 3px solid #fff3a2; outline-offset: 2px; }
   background-color:#17110d;
   background-image:url('assets/ending-comic.png');
   background-repeat:no-repeat;
-  background-size:100% 200%;
+  background-size:200% auto;
+  background-position:var(--result-art-x) 0%;
   box-shadow:inset 0 0 24px #0008,0 10px 28px #0008;
+  animation:result-art-scroll 24s ease-in-out infinite;
+  will-change:background-position;
 }
-.result-art.victory { background-position:0 0; }
-.result-art.defeat { background-position:0 100%; border-color:#7c4d83; }
+.result-art.victory { --result-art-x:0%; }
+.result-art.defeat { --result-art-x:100%; border-color:#7c4d83; }
+@keyframes result-art-scroll {
+  0%,8% { background-position:var(--result-art-x) 0%; }
+  46%,54% { background-position:var(--result-art-x) 100%; }
+  92%,100% { background-position:var(--result-art-x) 0%; }
+}
 .result-stats { display: flex; justify-content: center; gap: 35px; margin: 18px 0; padding: 14px 0; border-block: 1px solid #6f5738; color: #a99572; font: 9px Arial, sans-serif; letter-spacing: 2px; }
 .result-card .result-stats { grid-area:stats; width:100%; margin:4px 0; }
 .result-stats b { display: block; margin-top: 6px; color: #fff0c0; font: 700 21px Georgia, serif; }
