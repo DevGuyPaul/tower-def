@@ -147,12 +147,14 @@ class SoundEngine {
   lose() { [220, 175, 130].forEach((note, index) => setTimeout(() => this.tone(note, 0.38, 'sawtooth', 0.035, note * 0.72), index * 180)); }
 
   startMenuMusic() {
+    const wasAlreadyPlaying = this.menuActive;
     this.menuActive = true;
     if (!this.enabled || !this.context) return;
     if (!this.menuGain) {
       this.menuGain = this.context.createGain();
       this.menuGain.connect(this.context.destination);
     }
+    if (wasAlreadyPlaying) return;
     const now = this.context.currentTime;
     this.menuGain.gain.cancelScheduledValues(now);
     this.menuGain.gain.setValueAtTime(Math.max(0.0001, this.menuGain.gain.value), now);

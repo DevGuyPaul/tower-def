@@ -76,6 +76,7 @@ try {
   assert.equal(await evaluate("document.getElementById('entry-screen').classList.contains('leaving') && sounds.menuActive"), true, 'Start Game enables menu ambience and begins the fade-blur entrance');
   await delay(1100);
   assert.equal(await evaluate("document.getElementById('entry-screen').hidden && !document.getElementById('start-screen').hidden"), true, 'the entrance transition reveals the level and difficulty menu');
+  assert.equal(await evaluate("(() => { sounds.nextMenuNote=98765; sounds.menuStep=3; sounds.startMenuMusic(); sounds.startMenuMusic(); return sounds.nextMenuNote===98765 && sounds.menuStep===3; })()"), true, 'menu clicks do not restart or alter an already-playing ambient sequence');
   assert.equal(await evaluate("document.querySelectorAll('.level-card').length"), 3, 'level selector renders');
   assert.equal(await evaluate("document.querySelectorAll('.difficulty-options button').length"), 3, 'difficulty selector renders');
   assert.equal(await evaluate("document.querySelector('[data-difficulty=easy] small').textContent"), '8 waves', 'Easy does not advertise its health in the selector');
